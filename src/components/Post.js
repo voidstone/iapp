@@ -6,9 +6,9 @@ export default class Post extends Component {
         return (
             <div className="post">
                 <User src="https://www.kinogallery.com/images/469/kinogallery.com-469-0005847001468149528.jpg" 
-                alt="girl" 
-                name="Jennifer Connelly"
-                min />
+                        alt="girl" 
+                        name="Jennifer Connelly"
+                        min />
                 <img src={this.props.src} alt= {this.props.alt} />
                 <div className="post__name">
                     some account text

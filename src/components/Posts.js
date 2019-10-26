@@ -1,14 +1,72 @@
 import React, { Component } from 'react'
-import Post from "../components/Post"
+import InstaService from '../services/instaService';
+import User from './User';
 
 export default class Posts extends Component {
+    InstaService = new InstaService();
+    state = {
+        posts: [],
+        error: false
+    }
+    //хуки жизеннного цикла
+    //компонент сформировался
+    componentDidMount() {
+        this.updatePosts();
+    }
+
+    updatePosts() {
+        this.InstaService.getAllPosts()
+        .then(this.onPostsLoaded)
+        .catch(this.onError);
+    }
+
+    onPostsLoaded = (posts) => {
+        this.setState( {
+            posts ,// аналогия с posts:posts
+            error: false
+        });
+        //console.log(this.state.posts);
+    }
+
+    onError = (err) => {
+        this.setState( {            
+            error: true
+        });
+    }
+
+    renderItems(arr){
+        return arr.map(item => {
+            const {name, altname, photo, src, alt,descr, id} = item;
+
+            return (
+                <div key={id} className="post">
+                    <User 
+                            src={photo} 
+                            alt={altname} 
+                            name={name}
+                            min />
+                    <img src={src} alt= {alt} />
+                    <div className="post__name">
+                        {name}
+                    </div>
+                    <div className="post__descr">
+                        {descr}
+                    </div>
+                </div>
+            )
+        });
+    }
+
     render() {
+        const {error, posts} = this.state;
+
+
+        //те посты которые внутри стейта
+        const items = this.renderItems(posts);
+
         return (
             <div className="left">
-                <Post src="https://v1.popcornnews.ru/k2/news/970/upload/F34oN3.jpg" 
-                alt="first" />
-                <Post src="https://www.buro247.ru/thumb/670x830_0/images/anya/porter/jennifer-connelly-on-working-with-husband-paul-bettany-it-was-amazing-04.jpg" 
-                alt="second" />
+               {items}
             </div>
         )
     }
